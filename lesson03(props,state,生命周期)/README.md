@@ -1,0 +1,1 @@
+React ES6 class constructor super() 的解释：http://cheng.logdown.com/posts/2016/03/26/683329
