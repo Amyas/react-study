@@ -65,48 +65,86 @@ import PropTypes from "prop-types";
 /**
  * 3丶DEMO TodoList
  */
-const TodoList = props => (
-  <ul>{props.items.map(item => <li key={item.id}>{item.text}</li>)}</ul>
-);
+// const TodoList = props => (
+//   <ul>{props.items.map(item => <li key={item.id}>{item.text}</li>)}</ul>
+// );
+// class TodoApp extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.onChange = this.onChange.bind(this);
+//     this.handleSubmit = this.handleSubmit.bind(this);
+//     this.state = {
+//       items: [],
+//       text: ""
+//     };
+//   }
+//   onChange(e) {
+//     this.setState({
+//       text: e.target.value
+//     });
+//   }
+//   handleSubmit(e) {
+//     e.preventDefault();
+//     const nextItems = this.state.items.concat([
+//       { text: this.state.text, id: Date.now() }
+//     ]);
+//     const nextText = "";
+//     this.setState({
+//       items: nextItems,
+//       text: nextText
+//     });
+//   }
+//   render() {
+//     return (
+//       <div>
+//         <h3>TODO</h3>
+//         <TodoList items={this.state.items} />
+//         <form onSubmit={this.handleSubmit}>
+//           <input onChange={this.onChange} value={this.state.text} />
+//           <button>{"Add #" + (this.state.items.length + 1)}</button>
+//         </form>
+//       </div>
+//     );
+//   }
+// }
+// ReactDOM.render(<TodoApp />, document.getElementById("app"));
 
-class TodoApp extends React.Component {
+/**
+ * Refs/表单/markdown
+ */
+import Remarkable from "remarkable";
+
+class MarkdownEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.onChange = this.onChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.rawMarkup = this.rawMarkup.bind(this);
     this.state = {
-      items: [],
-      text: ""
+      value: "Type some *markdown* here!"
     };
   }
-  onChange(e) {
+  handleChange() {
     this.setState({
-      text: e.target.value
+      value: this.refs.textarea.value
     });
   }
-  handleSubmit(e) {
-    e.preventDefault();
-    const nextItems = this.state.items.concat([
-      { text: this.state.text, id: Date.now() }
-    ]);
-    const nextText = "";
-    this.setState({
-      items: nextItems,
-      text: nextText
-    });
+  rawMarkup() {
+    const md = new Remarkable();
+    return { __html: md.render(this.state.value) };
   }
   render() {
     return (
       <div>
-        <h3>TODO</h3>
-        <TodoList items={this.state.items} />
-        <form onSubmit={this.handleSubmit}>
-          <input onChange={this.onChange} value={this.state.text} />
-          <button>{"Add #" + (this.state.items.length + 1)}</button>
-        </form>
+        <h3>Input</h3>
+        <textarea
+          onChange={this.handleChange}
+          ref="textarea"
+          defaultValue={this.state.value}
+        />
+        <h3>Output</h3>
+        <div dangerouslySetInnerHTML={this.rawMarkup()} />
       </div>
     );
   }
 }
-
-ReactDOM.render(<TodoApp />, document.getElementById("app"));
+ReactDOM.render(<MarkdownEditor />, document.getElementById("app"));
