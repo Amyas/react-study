@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
 /**
- * 1丶props
+ * props
  */
 // ES6
 // class HelloMessage extends React.Component {
@@ -30,7 +30,7 @@ import PropTypes from "prop-types";
 // ReactDOM.render(<HelloMessage name="刘德华" />, document.getElementById("app"));
 
 /**
- * 2丶state
+ * state
  */
 // class Timer extends React.Component {
 //   constructor(props) {
@@ -63,7 +63,7 @@ import PropTypes from "prop-types";
 // ReactDOM.render(<Timer />, document.getElementById("app"));
 
 /**
- * 3丶DEMO TodoList
+ * DEMO TodoList
  */
 // const TodoList = props => (
 //   <ul>{props.items.map(item => <li key={item.id}>{item.text}</li>)}</ul>
@@ -112,39 +112,81 @@ import PropTypes from "prop-types";
 /**
  * Refs/表单/markdown
  */
-import Remarkable from "remarkable";
+// import Remarkable from "remarkable";
 
-class MarkdownEditor extends React.Component {
+// class MarkdownEditor extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.handleChange = this.handleChange.bind(this);
+//     this.rawMarkup = this.rawMarkup.bind(this);
+//     this.state = {
+//       value: "Type some *markdown* here!"
+//     };
+//   }
+//   handleChange() {
+//     this.setState({
+//       value: this.refs.textarea.value
+//     });
+//   }
+//   rawMarkup() {
+//     const md = new Remarkable();
+//     return { __html: md.render(this.state.value) };
+//   }
+//   render() {
+//     return (
+//       <div>
+//         <h3>Input</h3>
+//         <textarea
+//           onChange={this.handleChange}
+//           ref="textarea"
+//           defaultValue={this.state.value}
+//         />
+//         <h3>Output</h3>
+//         <div dangerouslySetInnerHTML={this.rawMarkup()} />
+//       </div>
+//     );
+//   }
+// }
+// ReactDOM.render(<MarkdownEditor />, document.getElementById("app"));
+
+/**
+ * Component 生命周期过程展示
+ */
+class MyComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.rawMarkup = this.rawMarkup.bind(this);
+    console.log("构造函数:constructor");
+    this.handleClick = this.handleClick.bind(this);
     this.state = {
-      value: "Type some *markdown* here!"
+      name: "Mark"
     };
   }
-  handleChange() {
+  handleClick() {
     this.setState({
-      value: this.refs.textarea.value
+      name: "Zuck"
     });
   }
-  rawMarkup() {
-    const md = new Remarkable();
-    return { __html: md.render(this.state.value) };
+  componentWillMount() {
+    console.log("组件加载之前:componentWillMount");
+  }
+  componentDidMount() {
+    console.log("组件加载之后:componentDidMount");
+  }
+  componentWillReceiveProps() {
+    console.log("组件收到新的Props:componentWillReceiveProps");
+  }
+  componentWillUpdate() {
+    console.log("组件更新之前:componentWillUpdate");
+  }
+  componentDidUpdate() {
+    console.log("组件更新之后:componentDidUpdate");
+  }
+  componentWillUnmount() {
+    console.log("组件卸载之后:componentWillUnmount");
   }
   render() {
-    return (
-      <div>
-        <h3>Input</h3>
-        <textarea
-          onChange={this.handleChange}
-          ref="textarea"
-          defaultValue={this.state.value}
-        />
-        <h3>Output</h3>
-        <div dangerouslySetInnerHTML={this.rawMarkup()} />
-      </div>
-    );
+    console.log("组件渲染中:render");
+    return <div onClick={this.handleClick}>Hi, {this.state.name}</div>;
   }
 }
-ReactDOM.render(<MarkdownEditor />, document.getElementById("app"));
+ReactDOM.render(<MyComponent />, document.getElementById("app"));
