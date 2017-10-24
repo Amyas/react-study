@@ -152,41 +152,82 @@ import PropTypes from "prop-types";
 /**
  * Component 生命周期过程展示
  */
-class MyComponent extends React.Component {
+// class MyComponent extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     console.log("构造函数:constructor");
+//     this.handleClick = this.handleClick.bind(this);
+//     this.state = {
+//       name: "Mark"
+//     };
+//   }
+//   handleClick() {
+//     this.setState({
+//       name: "Zuck"
+//     });
+//   }
+//   componentWillMount() {
+//     console.log("组件加载之前:componentWillMount");
+//   }
+//   componentDidMount() {
+//     console.log("组件加载之后:componentDidMount");
+//   }
+//   componentWillReceiveProps() {
+//     console.log("组件收到新的Props:componentWillReceiveProps");
+//   }
+//   componentWillUpdate() {
+//     console.log("组件更新之前:componentWillUpdate");
+//   }
+//   componentDidUpdate() {
+//     console.log("组件更新之后:componentDidUpdate");
+//   }
+//   componentWillUnmount() {
+//     console.log("组件卸载之后:componentWillUnmount");
+//   }
+//   render() {
+//     console.log("组件渲染中:render");
+//     return <div onClick={this.handleClick}>Hi, {this.state.name}</div>;
+//   }
+// }
+// ReactDOM.render(<MyComponent />, document.getElementById("app"));
+
+/**
+ * AJAX异步处理
+ */
+import $ from "jquery";
+class UserGithub extends React.Component {
   constructor(props) {
     super(props);
-    console.log("构造函数:constructor");
-    this.handleClick = this.handleClick.bind(this);
     this.state = {
-      name: "Mark"
+      username: "",
+      githubUrl: "",
+      avatarUrl: ""
     };
   }
-  handleClick() {
-    this.setState({
-      name: "Zuck"
+  componentDidMount() {
+    $.get(this.props.source, result => {
+      console.log(result);
+      const data = result;
+      if (data) {
+        this.setState({
+          username: data.name,
+          githubUrl: data.html_url,
+          avatarUrl: data.avatar_url
+        });
+      }
     });
   }
-  componentWillMount() {
-    console.log("组件加载之前:componentWillMount");
-  }
-  componentDidMount() {
-    console.log("组件加载之后:componentDidMount");
-  }
-  componentWillReceiveProps() {
-    console.log("组件收到新的Props:componentWillReceiveProps");
-  }
-  componentWillUpdate() {
-    console.log("组件更新之前:componentWillUpdate");
-  }
-  componentDidUpdate() {
-    console.log("组件更新之后:componentDidUpdate");
-  }
-  componentWillUnmount() {
-    console.log("组件卸载之后:componentWillUnmount");
-  }
   render() {
-    console.log("组件渲染中:render");
-    return <div onClick={this.handleClick}>Hi, {this.state.name}</div>;
+    return (
+      <div>
+        <h3>{this.state.username}</h3>
+        <img src={this.state.avatarUrl} />
+        <a href={this.state.githubUrl}>GitHub Link</a>
+      </div>
+    );
   }
 }
-ReactDOM.render(<MyComponent />, document.getElementById("app"));
+ReactDOM.render(
+  <UserGithub source="https://api.github.com/users/torvalds" />,
+  document.getElementById("app")
+);
