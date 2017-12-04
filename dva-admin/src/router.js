@@ -6,30 +6,37 @@ import AuthLayout from "./layout/AuthLayout";
 import AppLayout from "./layout/AppLayout";
 
 const routes = {
-  auth:[
+  auth:[,
     {
-      path: "/auth/signIn",
-      models: () => [import("./models/signIn")],
-      component: () => import("./routes/Auth/SignIn")
-    },
-    {
+      name:"注册",
       path: "/auth/signUp",
       models: () => [import("./models/signUp")],
       component: () => import("./routes/Auth/SignUp")
+    },
+    {
+      name:"登陆",
+      path: "/auth/signIn",
+      models: () => [import("./models/signIn")],
+      component: () => import("./routes/Auth/SignIn")
     }
   ],
   app:[
     {
+      name:"首页",
       path: "/app",
+      side:true,
       models: () => [import("./models/app")],
-      component: () => import("./routes/App")
+      component: () => import("./routes/App"),
     },
     {
+      name:"员工管理",
       path: "/app/users",
+      side:true,
       models: () => [import("./models/users/index")],
-      component: () => import("./routes/App/Users")
+      component: () => import("./routes/App/Users"),
     },
     {
+      name:"员工详情",
       path: "/app/users/:id",
       models: () => [import("./models/users/detail")],
       component: () => import("./routes/App/Users/Detail")

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "dva";
-import { Link, Route } from "dva/router";
+import { Link, Route,withRouter } from "dva/router";
 import styles from "./AppLayout.css";
 import { Layout, Menu, Icon } from "antd";
 const { Header, Sider, Content } = Layout;
@@ -11,7 +11,8 @@ class AppLayout extends React.Component {
     super(props);
     this.state = {
       collapsed: false,
-      navIndex: "1"
+      navIndex: "0",
+      navRoutes:null
     };
   }
   toggle = () => {
@@ -20,21 +21,37 @@ class AppLayout extends React.Component {
     });
   };
   componentWillMount() {
-    this.updateNav();
+    const {pathname} = this.props.location;
+    this.updateNav(pathname);
   }
-  updateNav() {
-    // const { nav, location: { pathname } } = this.props;
-    // let navIndex = nav.filter(e => {
-    //   return e.route == pathname;
-    // })[0];
-    // if (navIndex) {
-    //   this.asetState({
-    //     navIndex: String(navIndex.id)
-    //   });
-    // }
+  componentWillReceiveProps(nextProps){
+    const {pathname} = nextProps.location;
+    this.updateNav(pathname)
+  }
+  updateNav(pathname) {
+    const { routes } = this.props;
+    const navRoutes = routes.filter(e=>e.side);
+    const navIndex = this.getNavIndex(navRoutes,pathname);
+    this.setState({navRoutes,navIndex})
+  }
+  renderNav(routes){
+    return routes.map((e,i)=>(
+      <Menu.Item key={i}>
+        <Icon type="video-camera" />
+          <span>{e.name}</span>
+        <Link to={e.path} replace />
+      </Menu.Item>
+    ))
+  }
+  getNavIndex(routes,pathname){
+    for(var i = 0;i<routes.length;i++){
+      if(routes[i].path === pathname){
+        return String(i)
+      }
+    }
   }
   render() {
-    const { app,routes } = this.props;
+    const { app } = this.props;
     return (
       <Layout style={{ height: "100%" }}>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
@@ -43,17 +60,9 @@ class AppLayout extends React.Component {
             theme="dark"
             mode="inline"
             defaultSelectedKeys={[this.state.navIndex]}
+            selectedKeys={[this.state.navIndex]}
           >
-            <Menu.Item key="1">
-              <Icon type="video-camera" />
-              <span>首页</span>
-              <Link to="/app" replace />
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Icon type="video-camera" />
-              <span>员工管理</span>
-              <Link to="/app/users" replace />
-            </Menu.Item>
+            {this.renderNav(this.state.navRoutes)}
           </Menu>
         </Sider>
         <Layout>
@@ -72,7 +81,7 @@ class AppLayout extends React.Component {
               minHeight: 280
             }}
           >
-            {routes.map(({ path, ...dynamics }) => {
+            {this.state.navRoutes.map(({ path, ...dynamics }) => {
               return (
                 <Route
                   exact
@@ -94,4 +103,4 @@ class AppLayout extends React.Component {
 
 AppLayout.propTypes = {};
 
-export default AppLayout;
+export default withRouter(AppLayout);
