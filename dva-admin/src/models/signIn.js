@@ -6,7 +6,8 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(location => {
-        if (location.pathname === "/signIn") {
+        if (location.pathname === "/auth/signIn") {
+          localStorage.setItem("user","{}")
         }
       });
     }
