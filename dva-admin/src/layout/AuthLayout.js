@@ -2,20 +2,7 @@ import React from "react";
 import dynamic from "dva/dynamic";
 import { Route } from "dva/router";
 
-const AuthLayout = ({ app }) => {
-  const routes = [
-    {
-      path: "/auth/signIn",
-      models: () => [import("../models/signIn")],
-      component: () => import("../routes/Auth/SignIn")
-    },
-    {
-      path: "/auth/signUp",
-      models: () => [import("../models/signUp")],
-      component: () => import("../routes/Auth/SignUp")
-    }
-  ];
-
+const AuthLayout = ({ app,routes }) => {
   return (
     <div>
       <h1>Auth</h1>

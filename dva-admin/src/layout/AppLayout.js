@@ -34,24 +34,7 @@ class AppLayout extends React.Component {
     // }
   }
   render() {
-    const { app } = this.props;
-    const routes = [
-      {
-        path: "/app",
-        models: () => [import("../models/app")],
-        component: () => import("../routes/App")
-      },
-      {
-        path: "/app/users",
-        models: () => [import("../models/users/index")],
-        component: () => import("../routes/App/Users")
-      },
-      {
-        path: "/app/users/:id",
-        models: () => [import("../models/users/detail")],
-        component: () => import("../routes/App/Users/Detail")
-      }
-    ];
+    const { app,routes } = this.props;
     return (
       <Layout style={{ height: "100%" }}>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
