@@ -9,7 +9,6 @@ class Top extends React.Component {
     this.state = { txt: "" };
   }
   render() {
-    console.log(this.props.data)
     return (
       <Row>
         <Col span={21}>

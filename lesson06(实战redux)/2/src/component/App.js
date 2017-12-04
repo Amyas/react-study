@@ -17,6 +17,4 @@ class App extends React.Component {
   }
 }
 
-export default connect(state => {
-  return { data: state };
-})(App);
+export default connect()(App);
