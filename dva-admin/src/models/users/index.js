@@ -1,23 +1,40 @@
+import * as userServers from "../../services/app/userServers";
 export default {
-  namespace: "user",
-  state: {},
-  reducers: {},
+  namespace: "users",
+  state: {
+    list: [],
+    current: 1,
+    total: null
+  },
+  reducers: {
+    updateState(state, { payload }) {
+      return {
+        ...state,
+        ...payload
+      };
+    }
+  },
   effects: {
-    // *query() {
-    //   const data = yield call(userServers.query, payload);
-    //   // console.log(data)
-    //   return {};
-    // }
+    *query({ payload }, { call, put }) {
+      const { data: list, meta: { pagination } } = yield call(
+        userServers.query,
+        payload
+      );
+      const { current_page: current, total } = pagination;
+      yield put({
+        type: "updateState",
+        payload: { list, current, total }
+      });
+    }
   },
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(location => {
-        if (location.pathname === "/user") {
-          // const payload = location.query || { page: 1, pageSize: 10 };
-          // dispatch({
-          //   type: "query",
-          //   payload
-          // });
+        if (location.pathname === "/app/users") {
+          dispatch({
+            type: "query",
+            payload: { page: 1 }
+          });
         }
       });
     }

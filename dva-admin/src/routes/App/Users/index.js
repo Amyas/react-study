@@ -1,69 +1,81 @@
 import React from "react";
 import { connect } from "dva";
 import styles from "./index.css";
-import { Table, Icon } from "antd";
+import { Table, Icon, Pagination, Popconfirm } from "antd";
 
 const columns = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    render: text => <a href="#">{text}</a>
+    title: "id",
+    dataIndex: "id"
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age"
+    title: "名称",
+    dataIndex: "name"
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address"
+    title: "手机号",
+    dataIndex: "phone"
   },
   {
-    title: "Action",
-    key: "action",
-    render: (text, record) => (
+    title: "操作",
+    render: (text, { id }) => (
       <span>
-        <a href="#">Action 一 {record.name}</a>
-        <span className="ant-divider" />
-        <a href="#">Delete</a>
-        <span className="ant-divider" />
-        <a href="#" className="ant-dropdown-link">
-          More actions <Icon type="down" />
+        <a
+          href="javascript:;"
+          onClick={() => {
+            console.log("编辑" + id);
+          }}
+        >
+          编辑
         </a>
+        <span>&nbsp;|&nbsp;</span>
+        <Popconfirm
+          title="确定删除?"
+          onConfirm={() => {
+            console.log("删除" + id);
+          }}
+        >
+          <a href="javascript:;">删除</a>
+        </Popconfirm>
       </span>
     )
   }
 ];
 
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park"
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park"
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park"
+class Users extends React.Component {
+  constructor(props) {
+    super(props);
   }
-];
-
-function User() {
-  return <Table columns={columns} dataSource={data} />;
+  render() {
+    const { list, current, total, loading, dispatch } = this.props;
+    return (
+      <div>
+        <Table
+          columns={columns}
+          loading={loading.global}
+          rowKey={record => record.id}
+          dataSource={this.props.list}
+          pagination={false}
+        />
+        <Pagination
+          style={{ "margin": "30px 0" }}
+          total={total}
+          current={current}
+          onChange={page => {
+            dispatch({
+              type: "users/query",
+              payload: { page }
+            });
+          }}
+        />
+      </div>
+    );
+  }
 }
 
 function mapStateToProps(state) {
-  return {};
+  const { list, current, total } = state.users;
+  return { loading: state.loading, list, current, total };
 }
 
-export default connect(mapStateToProps)(User);
+export default connect(mapStateToProps)(Users);

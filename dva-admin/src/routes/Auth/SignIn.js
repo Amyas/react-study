@@ -1,19 +1,41 @@
 import React from "react";
 import { connect } from "dva";
-import { Link } from "dva/router";
+import { routerRedux } from "dva/router";
 import styles from "./SignIn.css";
 
-function SignIn() {
-  return (
-    <div className={styles.normal}>
-      Route Component: SignIn
-      <Link to="/app">登陆</Link>
-    </div>
-  );
+class SignIn extends React.Component {
+  componentWillReceiveProps(props) {
+    this.props.dispatch(
+      routerRedux.push({
+        pathname: "/app"
+      })
+    );
+  }
+  render() {
+    return (
+      <div className={styles.normal}>
+        Route Component: SignIn
+        <button
+          onClick={() => {
+            this.props.dispatch({
+              type: "signIn/authorizations",
+              payload: {
+                phone: "15712552986",
+                password: "huaxing2017"
+              }
+            });
+          }}
+        >
+          登录
+        </button>
+      </div>
+    );
+  }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  const { token } = state.signIn;
+  return { token };
 }
 
 export default connect(mapStateToProps)(SignIn);

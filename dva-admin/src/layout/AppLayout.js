@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "dva";
-import { Link, Route,withRouter } from "dva/router";
+import { Link, Route, withRouter } from "dva/router";
 import styles from "./AppLayout.css";
 import { Layout, Menu, Icon } from "antd";
 const { Header, Sider, Content } = Layout;
@@ -12,7 +12,7 @@ class AppLayout extends React.Component {
     this.state = {
       collapsed: false,
       navIndex: "0",
-      navRoutes:null
+      navRoutes: null
     };
   }
   toggle = () => {
@@ -21,32 +21,32 @@ class AppLayout extends React.Component {
     });
   };
   componentWillMount() {
-    const {pathname} = this.props.location;
+    const { pathname } = this.props.location;
     this.updateNav(pathname);
   }
-  componentWillReceiveProps(nextProps){
-    const {pathname} = nextProps.location;
-    this.updateNav(pathname)
+  componentWillReceiveProps(nextProps) {
+    const { pathname } = nextProps.location;
+    this.updateNav(pathname);
   }
   updateNav(pathname) {
     const { routes } = this.props;
-    const navRoutes = routes.filter(e=>e.side);
-    const navIndex = this.getNavIndex(navRoutes,pathname);
-    this.setState({navRoutes,navIndex})
+    const navRoutes = routes.filter(e => e.side);
+    const navIndex = this.getNavIndex(navRoutes, pathname);
+    this.setState({ navRoutes, navIndex });
   }
-  renderNav(routes){
-    return routes.map((e,i)=>(
+  renderNav(routes) {
+    return routes.map((e, i) => (
       <Menu.Item key={i}>
         <Icon type="video-camera" />
-          <span>{e.name}</span>
+        <span>{e.name}</span>
         <Link to={e.path} replace />
       </Menu.Item>
-    ))
+    ));
   }
-  getNavIndex(routes,pathname){
-    for(var i = 0;i<routes.length;i++){
-      if(routes[i].path === pathname){
-        return String(i)
+  getNavIndex(routes, pathname) {
+    for (var i = 0; i < routes.length; i++) {
+      if (routes[i].path === pathname) {
+        return String(i);
       }
     }
   }

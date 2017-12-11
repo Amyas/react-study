@@ -7,8 +7,8 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(({ pathname }) => {
-        const user = localStorage.getItem("user");
-        if (!user && pathname !== "/auth/signIn") {
+        const token = localStorage.getItem("token");
+        if (!token && pathname != "/auth/signIn") {
           dispatch(routerRedux.push("/auth/signIn"));
         }
       });
