@@ -6,37 +6,31 @@ import AuthLayout from "./layout/AuthLayout";
 import AppLayout from "./layout/AppLayout";
 
 const routes = {
-  auth:[,
+  auth: [
     {
-      name:"注册",
-      path: "/auth/signUp",
-      models: () => [import("./models/signUp")],
-      component: () => import("./routes/Auth/SignUp")
-    },
-    {
-      name:"登陆",
+      name: "登陆",
       path: "/auth/signIn",
       models: () => [import("./models/signIn")],
       component: () => import("./routes/Auth/SignIn")
     }
   ],
-  app:[
+  app: [
     {
-      name:"首页",
+      name: "首页",
       path: "/app",
-      side:true,
+      side: true,
       models: () => [import("./models/app")],
-      component: () => import("./routes/App"),
+      component: () => import("./routes/App")
     },
     {
-      name:"员工管理",
+      name: "员工管理",
       path: "/app/users",
-      side:true,
+      side: true,
       models: () => [import("./models/users/index")],
-      component: () => import("./routes/App/Users"),
+      component: () => import("./routes/App/Users")
     },
     {
-      name:"员工详情",
+      name: "员工详情",
       path: "/app/users/:id",
       models: () => [import("./models/users/detail")],
       component: () => import("./routes/App/Users/Detail")
@@ -48,8 +42,14 @@ function RouterConfig({ history, app }) {
   return (
     <Router history={history}>
       <Switch>
-        <Route path="/auth" render={props => <AuthLayout app={app} routes={routes.auth} />} />
-        <Route path="/app" render={props => <AppLayout app={app} routes={routes.app} />} />
+        <Route
+          path="/auth"
+          render={props => <AuthLayout app={app} routes={routes.auth} />}
+        />
+        <Route
+          path="/app"
+          render={props => <AppLayout app={app} routes={routes.app} />}
+        />
         <Redirect to="/app" />
       </Switch>
     </Router>

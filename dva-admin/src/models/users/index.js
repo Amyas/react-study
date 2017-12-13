@@ -4,10 +4,19 @@ export default {
   state: {
     list: [],
     current: 1,
-    total: null
+    total: null,
+    modalVisible: false,
+    modalType: "create",
+    currentItem: null
   },
   reducers: {
     updateState(state, { payload }) {
+      return {
+        ...state,
+        ...payload
+      };
+    },
+    changeModalVisible(state, { payload }) {
       return {
         ...state,
         ...payload
@@ -24,6 +33,26 @@ export default {
       yield put({
         type: "updateState",
         payload: { list, current, total }
+      });
+    },
+    *create({ payload }, { call, put, select }) {
+      const data = yield call(userServers.create, payload);
+      const { current } = yield select(state => state.users);
+      yield put({
+        type: "query",
+        payload: { page: current }
+      });
+      yield put({
+        type: "changeModalVisible",
+        payload: { modalVisible: false }
+      });
+    },
+    *delete({ payload }, { call, put, select }) {
+      yield call(userServers.del, payload);
+      const { current } = yield select(state => state.users);
+      yield put({
+        type: "query",
+        payload: { page: current }
       });
     }
   },

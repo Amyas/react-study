@@ -1,4 +1,5 @@
 import fetch from "dva/fetch";
+import { message } from "antd";
 const baseURL = "http://test.api.hx.icestargroup.com/v1/";
 
 function parseJSON(response) {
@@ -10,6 +11,7 @@ function checkStatus(response) {
     return response;
   }
 
+  message.error(`错误${response.status}:${response.statusText}`);
   const error = new Error(response.statusText);
   error.response = response;
   throw error;
@@ -34,15 +36,20 @@ export default function request(options) {
       )}`
     }
   };
-  if (option.method === "POST") {
-    option["body"] = JSON.stringify(options.data) || "{}";
-  }
-  if (option.method === "GET") {
+  if (option.method === "GET" && options.data) {
     let paramsArray = [];
     Object.keys(options.data).forEach(key =>
       paramsArray.push(key + "=" + options.data[key])
     );
     url += "?" + paramsArray.join("&");
+  }
+  if (option.method === "POST" && options.data) {
+    option["headers"]["Content-Type"] = "application/x-www-form-urlencoded";
+    let paramsArray = [];
+    Object.keys(options.data).forEach(key =>
+      paramsArray.push(key + "=" + options.data[key])
+    );
+    option["body"] = paramsArray.join("&");
   }
   return fetch(url, option)
     .then(checkStatus)
